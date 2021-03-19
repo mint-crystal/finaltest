@@ -33,31 +33,38 @@ public class CkeditorFileUploadController {
 		PrintWriter printWriter = null;
 		OutputStream out = null;
 		MultipartFile file = multiFile.getFile("upload");
+		String originalFileName = file.getOriginalFilename();
+		String fileRealPathName = "E:/KH/파이널프로젝트/테스트/final_demo/src/main/webapp/resources/img";
+		System.out.println("originalFileName:"+originalFileName);
 		if(file != null){
 			if(file.getSize() > 0 && StringUtils.isNotBlank(file.getName())){
 				if(file.getContentType().toLowerCase().startsWith("image/")){
 					try{
 						String fileName = file.getName();
 						byte[] bytes = file.getBytes();
-						String uploadPath = req.getSession().getServletContext().getRealPath("img");
+						//String uploadPath = req.getSession().getServletContext().getRealPath("img");
+						String uploadPath = fileRealPathName;
 						File uploadFile = new File(uploadPath);
 						if(!uploadFile.exists()){
 							uploadFile.mkdirs();
 						}
 						fileName = UUID.randomUUID().toString();
-						uploadPath = uploadPath + "/" + fileName;
+						//uploadPath = uploadPath + "/" + fileName;
+						uploadPath = uploadPath + "/" + originalFileName;
 						out = new FileOutputStream(new File(uploadPath));
                         out.write(bytes);
                         
                         printWriter = resp.getWriter();
                         resp.setContentType("text/html");
-                        String fileUrl = "/img/" + fileName;
-                        
+                        //String fileUrl = "/img/" + fileName;
+                        String fileUrl = "/herb/resources/img/" + originalFileName;
                         // json 데이터로 등록
                         // {"uploaded" : 1, "fileName" : "test.jpg", "url" : "/img/test.jpg"}
                         // 이런 형태로 리턴이 나가야함.
                         json.addProperty("uploaded", 1);
-                        json.addProperty("fileName", fileName);
+                        //json.addProperty("fileName", fileName);
+                        //json.addProperty("url", fileUrl);
+                        json.addProperty("fileName", originalFileName);
                         json.addProperty("url", fileUrl);
                         
                         printWriter.println(json);

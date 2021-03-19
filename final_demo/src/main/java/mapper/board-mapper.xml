@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board">
+	<resultMap id="resultBoard" type="Board">
+		<id property="num" column="NUM" />
+		<result property="title" column="TITLE" />
+		<result property="content" column="CONTENT" />
+	</resultMap>
+	
+	<insert id="insertBoard" parameterType="Board">
+		INSERT INTO BOARD VALUES(BOARD_SEQ.NEXTVAL, #{title}, #{content})
+	</insert>
+	
+	<select id="boardList" resultMap="resultBoard">
+		SELECT * FROM BOARD
+	</select>
+		
+	<select id="selectBoard" parameterType="int" resultMap="resultBoard">
+		SELECT * FROM BOARD WHERE NUM=#{num}
+	</select>
+</mapper>
